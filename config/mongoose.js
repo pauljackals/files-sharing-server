@@ -1,0 +1,25 @@
+const mongoose = require("mongoose")
+
+const username = process.env.MONGO_USERNAME
+const password = encodeURIComponent(process.env.MONGO_PASSWORD)
+const host = "localhost"
+const port = process.env.MONGO_PORT || 27017
+const database = process.env.MONGO_DATABASE
+
+mongoose.connect(`mongodb://${username}:${password}@${host}:${port}/${database}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+
+mongoose.connection
+    .on("connected", () => {
+        console.log("Connected to MongoDB")
+    })
+    .on("error", error => {
+        console.error("MongoDB connection error\n", error)
+    })
+    .on("disconnected", () => {
+        console.log("Disconnected from MongoDB")
+    })
+
+module.exports = mongoose
