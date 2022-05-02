@@ -1,10 +1,11 @@
-const {Schema, model, Error:{ValidationError}} = require("../config/mongoose")
+const { Schema, model, Error:{ValidationError} } = require("../config/mongoose")
 const passportLocalMongoose = require("passport-local-mongoose")
-const { BOOLEAN } = require("./types")
+const { BOOLEAN, USER, DATE } = require("./types")
 const { rootUsername } = require("../config/constants")
 
 const userSchema = new Schema({
-    admin: BOOLEAN
+    admin: BOOLEAN,
+    registration: DATE
 })
 
 const passwordValidator = (password, cb) => {
@@ -14,7 +15,7 @@ const passwordValidator = (password, cb) => {
     cb()
 }
 const usernameValidator = username => {
-    const regex = new RegExp(`^[A-Za-z0-9]{1,32}${rootUsername ? `|${rootUsername}` : ""}$`)
+    const regex = new RegExp(`^([A-Za-z0-9]{1,32}|${rootUsername})$`)
     return username.match(regex)
 }
 
@@ -25,4 +26,4 @@ userSchema.plugin(passportLocalMongoose, {
 })
 userSchema.path("username").validate(usernameValidator)
 
-module.exports = model("User", userSchema)
+module.exports = model(USER.ref, userSchema)

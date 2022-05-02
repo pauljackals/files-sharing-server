@@ -1,7 +1,7 @@
 const router = require("express").Router()
 const { handleUnknownRoutes, authenticateUser, authorizeAdmin } = require("../utils/middlewares")
 const access = require("./access")
-const admin = require("./admin")
+const admin = require("./admin/admin")
 
 router
     .use("/access", access)

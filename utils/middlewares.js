@@ -32,6 +32,7 @@ const handleErrors = (err, req, res, next) => {
         sendResponse(400, "invalid syntax")
 
     } else if(err instanceof ValidationError) {
+        console.log(err);
         sendResponse(422, "validation error")
     
     } else if(err instanceof AuthenticationError) {

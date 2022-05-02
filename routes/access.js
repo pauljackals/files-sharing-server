@@ -7,7 +7,7 @@ const { MissingCredentialsError } = require("../utils/errors")
 
 router
     .post("/register", (req, res, next) => {
-        const {username, password} = req.body
+        const {username, password, code} = req.body
 
         const user = new User({
             username,
