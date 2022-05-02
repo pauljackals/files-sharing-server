@@ -15,8 +15,10 @@ const createError = name => {
 
 const notFoundError = "NotFoundError"
 const missingCredentialsError = "MissingCredentialsError"
+const authorizationError = "AuthorizationError"
 
 module.exports = {
     [notFoundError]: createError(notFoundError),
-    [missingCredentialsError]: createError(missingCredentialsError)
+    [missingCredentialsError]: createError(missingCredentialsError),
+    [authorizationError]: createError(authorizationError)
 }

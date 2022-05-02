@@ -7,11 +7,18 @@ const {
     IncorrectUsernameError
 } = require("passport-local-mongoose/lib/errors")
 const AuthenticationError = require("passport/lib/errors/authenticationerror")
-const { NotFoundError, MissingCredentialsError } = require("./errors")
+const { NotFoundError, MissingCredentialsError, AuthorizationError } = require("./errors")
 
 const authenticateUser = (req, res, next) => {
     if (!req.isAuthenticated()) {
         return next(new AuthenticationError("authentication fail"))
+    }
+    next()
+}
+
+const authorizeAdmin = (req, res, next) => {
+    if(!req.user.admin) {
+        return next(new AuthorizationError("authorization fail"))
     }
     next()
 }
@@ -29,6 +36,9 @@ const handleErrors = (err, req, res, next) => {
     
     } else if(err instanceof AuthenticationError) {
         sendResponse(401, "unauthenticated")
+
+    } else if(err instanceof AuthorizationError) {
+        sendResponse(403, "unauthorized")
 
     } else if(err instanceof NotFoundError) {
         sendResponse(404, "resource not found")
@@ -56,6 +66,7 @@ const handleErrors = (err, req, res, next) => {
 
 module.exports = {
     authenticateUser,
+    authorizeAdmin,
     handleUnknownRoutes,
     handleErrors
 }
