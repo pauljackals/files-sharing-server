@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser")
 const session = require("./config/session")
 const passport = require("./config/passport")
 const router = require("./routes/router")
-const { createRootUserIfMissing } = require("./utils/functions")
+const createRootUserIfMissing = require("./utils/createRootUserIfMissing")
 const { handleErrors } = require("./utils/middlewares")
 const port = process.env.EXPRESS_PORT || 3000
 

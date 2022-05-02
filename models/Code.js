@@ -10,6 +10,7 @@ const codeSchema = new Schema({
         sparse: true
     }
 })
+
 const autoPopulateSetup = autoPopulate("user")
 codeSchema.pre("find", autoPopulateSetup)
 codeSchema.pre("findOne", autoPopulateSetup)

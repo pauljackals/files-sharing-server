@@ -1,6 +1,5 @@
 const Code = require("../../models/Code")
 const { NotFoundError, AuthorizationError } = require("../../utils/errors")
-
 const router = require("express").Router()
 
 router
@@ -26,7 +25,7 @@ router
                 } else if (code.user) {
                     throw new AuthorizationError("code used")
                 }
-                return Code.findByIdAndDelete(id).exec()
+                return Code.findByIdAndDelete(code._id).exec()
                     .then(() => res.status(200).json({code}))
 
             })
