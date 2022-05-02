@@ -31,7 +31,13 @@ const createRootUserIfMissing = () => {
         .catch(handleError)
 }
 
+const autoPopulate = field => function(next) {
+    this.populate(field)
+    next()
+}
+
 module.exports = {
     cleanUser,
-    createRootUserIfMissing
+    createRootUserIfMissing,
+    autoPopulate
 }

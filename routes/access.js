@@ -3,23 +3,44 @@ const passport = require("../config/passport")
 const User = require("../models/User")
 const { authenticateUser } = require("../utils/middlewares")
 const { cleanUser } = require("../utils/functions")
-const { MissingCredentialsError } = require("../utils/errors")
+const { MissingCredentialsError, NotFoundError, AuthorizationError } = require("../utils/errors")
+const Code = require("../models/Code")
 
 router
     .post("/register", (req, res, next) => {
         const {username, password, code} = req.body
 
-        const user = new User({
-            username,
-            admin: false
-        })
-        User.register(user, password, (err, user) => {
-            if(err) {
-                return next(err)
-            }
-            cleanUser(user)
-            res.status(201).json({user})
-        })
+        Code.findOne({code}).exec()
+            .then(code => {
+                if(!code) {
+                    throw new NotFoundError("code not found")
+                } else if (code.user) {
+                    throw new AuthorizationError("code used")
+                }
+
+                const user = new User({
+                    username,
+                    admin: false
+                })
+                User.register(user, password, (err, user) => {
+                    if(err) {
+                        return next(err)
+                    }
+
+                    code.user = user
+                    code.save()
+                        .then(() => {
+                            cleanUser(user)
+                            res.status(201).json({user})
+                        })
+                        .catch(err => 
+                            User.findByIdAndDelete(user._id).exec()
+                                .finally(() => next(err))
+                        )
+                })
+
+            })
+            .catch(err => next(err))
 
     })
     .post("/login", (req, res, next) => {

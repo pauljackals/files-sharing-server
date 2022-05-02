@@ -1,4 +1,4 @@
-const { ValidationError } = require("../config/mongoose").Error
+const { ValidationError, CastError } = require("../config/mongoose").Error
 const {
     MissingPasswordError,
     MissingUsernameError,
@@ -28,11 +28,13 @@ const handleUnknownRoutes = (req, res, next) => next(new NotFoundError("route no
 const handleErrors = (err, req, res, next) => {
     const sendResponse = (status, message) => res.status(status).json({message})
 
-    if (err instanceof SyntaxError) {
-        sendResponse(400, "invalid syntax")
+    if (
+        err instanceof SyntaxError ||
+        err instanceof CastError
+    ) {
+        sendResponse(400, "invalid request")
 
     } else if(err instanceof ValidationError) {
-        console.log(err);
         sendResponse(422, "validation error")
     
     } else if(err instanceof AuthenticationError) {
@@ -62,6 +64,7 @@ const handleErrors = (err, req, res, next) => {
 
     } else {
         sendResponse(500, "unknown error")
+        console.error(err)
     }
 }
 

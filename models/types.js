@@ -25,6 +25,7 @@ const DATE = {
 const UUID = {
     type: String,
     required: true,
+    unique: true,
     validate: uuid => uuidValidate(uuid) && uuidVersion(uuid)===4,
     default: uuidV4
 }
@@ -32,12 +33,14 @@ const UUID = {
 const USER = {
     type: SchemaTypes.ObjectId,
     ref: "User",
-    required: true
+    required: true,
+    unique: true
 }
 const CODE = {
     type: SchemaTypes.ObjectId,
     ref: "Code",
-    required: true
+    required: true,
+    unique: true
 }
 
 module.exports = {
