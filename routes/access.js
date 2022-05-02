@@ -8,7 +8,11 @@ router
     .post("/register", (req, res, next) => {
         const {username, password} = req.body
 
-        User.register({username}, password, (err, user) => {
+        const user = new User({
+            username,
+            admin: false
+        })
+        User.register(user, password, (err, user) => {
             if(err) {
                 return next(err)
             }
