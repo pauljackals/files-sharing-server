@@ -1,10 +1,9 @@
 const router = require("express").Router()
+const { handleUnknownRoutes } = require("../utils/middlewares")
 const access = require("./access")
 
 router
     .use("/access", access)
-    .use((req, res, next) => {
-        next(new Error("route not found"))
-    })
+    .use(handleUnknownRoutes)
 
 module.exports = router

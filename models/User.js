@@ -1,4 +1,4 @@
-const {Schema, model} = require("../config/mongoose")
+const {Schema, model, Error:{ValidationError}} = require("../config/mongoose")
 const passportLocalMongoose = require("passport-local-mongoose")
 const { BOOLEAN } = require("./types")
 const { rootUsername } = require("../config/constants")
@@ -9,7 +9,7 @@ const userSchema = new Schema({
 
 const passwordValidator = (password, cb) => {
     if(!password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,256}$/)) {
-        return cb(new Error("validation error"))
+        return cb(new ValidationError("password validation error"))
     }
     cb()
 }

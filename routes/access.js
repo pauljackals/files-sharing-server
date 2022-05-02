@@ -3,6 +3,7 @@ const passport = require("../config/passport")
 const User = require("../models/User")
 const { authenticateUser } = require("../utils/middlewares")
 const { cleanUser } = require("../utils/functions")
+const { MissingCredentialsError } = require("../utils/errors")
 
 router
     .post("/register", (req, res, next) => {
@@ -22,7 +23,9 @@ router
 
     })
     .post("/login", (req, res, next) => {
-        passport.authenticate("local", {badRequestMessage: new Error("missing credentials")}, (err, user, info) => {
+        const errorFix = {badRequestMessage: new MissingCredentialsError("missing credentials")}
+        
+        passport.authenticate("local", errorFix, (err, user, info) => {
             const errFound = [err, info, info?.message].find(err => err instanceof Error)
             if(errFound) {
                 return next(errFound)

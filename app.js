@@ -9,6 +9,7 @@ const session = require("./config/session")
 const passport = require("./config/passport")
 const router = require("./routes/router")
 const { createRootUserIfMissing } = require("./utils/functions")
+const { handleErrors } = require("./utils/middlewares")
 const port = process.env.EXPRESS_PORT || 3000
 
 const app = express()
@@ -19,6 +20,7 @@ app
     .use(passport.initialize())
     .use(passport.session())
     .use(router)
+    .use(handleErrors)
 
 app.listen(port, () => console.log(`Server listening on port ${port}`))
 
