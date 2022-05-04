@@ -5,7 +5,7 @@ const { NotFoundError } = require("../utils/errors")
 
 router
     .get("/", (req, res, next) => {
-        const files = dirTree(sharedDirectory, {
+        const directory = dirTree(sharedDirectory, {
             normalizePath: true,
             attributes: [
                 "type",
@@ -14,10 +14,10 @@ router
                 "mtime"
             ]
         })
-        if(!files) {
+        if(!directory) {
             return next(new NotFoundError("shared directory not found"))
         }
-        res.status(200).json({files})
+        res.status(200).json({directory})
 
     })
 

@@ -51,7 +51,7 @@ router
             if(errFound) {
                 return next(errFound)
             }
-            req.login(user, err => {
+            req.logIn(user, err => {
                 if(err) {
                     return next(err)
                 }
@@ -63,7 +63,7 @@ router
 
     })
     .delete("/logout", authenticateUser, (req, res, next) => {
-        req.logout()
+        req.logOut()
         req.session.destroy(() => {
             res.clearCookie("connect.sid")
             res.status(200).json({})
