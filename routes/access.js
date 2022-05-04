@@ -69,8 +69,9 @@ router
             res.status(200).json({})
         })
     })
-    .get("/test", authenticateUser, (req, res, next) => {
-        res.status(200).json({})
+    .get("/me", authenticateUser, (req, res, next) => {
+        const {user} = req
+        res.status(200).json({user})
     })
 
 module.exports = router
