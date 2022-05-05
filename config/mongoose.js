@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const username = process.env.MONGO_USERNAME
 const password = encodeURIComponent(process.env.MONGO_PASSWORD)
-const host = "localhost"
+const host = process.env.MONGO_HOST || "localhost"
 const port = process.env.MONGO_PORT || 27017
 const database = process.env.MONGO_DATABASE
 
